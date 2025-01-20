@@ -52,21 +52,21 @@ const PageLayout = () => {
                                 応募管理
                             </p>
                         </Link>
-                        <Link to={"/admin/customers"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/customers") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
+                        <Link to={"/admin/corporation"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/customers") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
                             <p className={`flex justify-start items-center gap-2 text-[#EFEFEF] lg:text-lg md:text-base text-sm font-bold px-2
                                 hover:text-white hover:font-medium hover:pl-2 duration-300`}>
                                 <HiMiniUserGroup className="w-5 h-5 mt-0.5"/>
                                 法人管理
                             </p>
                         </Link>
-                        <Link to={"/admin/facilities"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/facilities") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
+                        <Link to={"/admin/facility"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/facilities") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
                             <p className={`flex justify-start items-center gap-2 text-[#EFEFEF] lg:text-lg md:text-base text-sm font-bold px-2
                                 hover:text-white hover:font-medium hover:pl-2 duration-300`}>
                                 <BsBuildingFillGear className="w-5 h-5 mt-0.5"/>
                                 施設管理
                             </p>
                         </Link>
-                        <Link to={"/admin/jobposts"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/jobposts") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
+                        <Link to={"/admin/recruit"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/jobposts") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
                             <p className={`flex justify-start items-center gap-2 text-[#EFEFEF] lg:text-lg md:text-base text-sm font-bold px-2
                                 hover:text-white hover:font-medium hover:pl-2 duration-300`}>
                                 <BsPostcardFill className="w-5 h-5 mt-0.5"/>
@@ -80,21 +80,21 @@ const PageLayout = () => {
                                 施設審査
                             </p>
                         </Link>
-                        <Link to={"#"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("#") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
+                        <Link to={"/admin/examination_recruit"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("#") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
                             <p className={`flex justify-start items-center gap-2 text-[#EFEFEF] lg:text-lg md:text-base text-sm font-bold px-2
                                 hover:text-white hover:font-medium hover:pl-2 duration-300`}>
                                 <TbDeviceTabletSearch className="w-5 h-5 mt-0.5"/>
                                 求人審査
                             </p>
                         </Link>
-                        <Link to={"/admin/users"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/users") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
+                        <Link to={"/admin/member"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/users") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
                             <p className={`flex justify-start items-center gap-2 text-[#EFEFEF] lg:text-lg md:text-base text-sm font-bold px-2
                                 hover:text-white hover:font-medium hover:pl-2 duration-300`}>
                                 <LiaUsersSolid className="w-5 h-5 mt-0.5"/>
                                 CS会員管理
                             </p>
                         </Link>
-                        <Link to={"/admin/qa"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/qa") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
+                        <Link to={"/admin/contact"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/qa") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
                             <p className={`flex justify-start items-center gap-2 text-[#EFEFEF] lg:text-lg md:text-base text-sm font-bold px-2
                                 hover:text-white hover:font-medium hover:pl-2 duration-300`}>
                                 <BsFillQuestionCircleFill className="w-5 h-5 mt-0.5"/>
@@ -108,7 +108,7 @@ const PageLayout = () => {
                                 設定
                             </p>
                         </Link>
-                        <Link to={"/admin/contents"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/contents") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
+                        <Link to={"/cms"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("/admin/contents") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
                             <p className={`flex justify-start items-center gap-2 text-[#EFEFEF] lg:text-lg md:text-base text-sm font-bold px-2
                                 hover:text-white hover:font-medium hover:pl-2 duration-300`}>
                                 <MdOutlineContentPaste className="w-5 h-5 mt-0.5"/>
