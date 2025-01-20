@@ -15,11 +15,10 @@ import { IoSettings } from "react-icons/io5";
 const PageLayout = () => {
     const location = useLocation();
     const isSelected = (path) => location.pathname.includes(path);
-    const navigate = useNavigate();
 
-    const handleLogout = async () => {
-        await localStorage.removeItem("token");
-        navigate("/admin");
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location.href = "/";
     }
 
     return (
@@ -33,7 +32,7 @@ const PageLayout = () => {
                                 <img src="/assets/images/logo_negative_horizontal00 1.png" alt="logo" className='w-24 hover:scale-105 duration-300'/>
                             </Link>
                             </div>
-                            <button className="lg:text-base text-sm font-bold flex items-center hover:text-[#fff] duration-300 hover:scale-105"><MdOutlineLogout className="w-5 h-5 mt-1" onClick={handleLogout}/>ログアウト</button>
+                            <button className="lg:text-base text-sm font-bold flex items-center hover:text-[#fff] duration-300 hover:scale-105" onClick={handleLogout}><MdOutlineLogout className="w-5 h-5 mt-1"/>ログアウト</button>
                         </div>
                     </header>
                 </div>
@@ -74,7 +73,7 @@ const PageLayout = () => {
                                 求人管理
                             </p>
                         </Link>
-                        <Link to={"#"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("#") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
+                        <Link to={"/admin/examination_facility/"} className={`flex justify-start items-center p-2 rounded-lg gap-2 duration-300 mt-4 ${isSelected("#") ? 'font-medium pl-2 duration-300 bg-[#17a2b8]' : 'text-gray-400 hover:bg-slate-300'}`}>
                             <p className={`flex justify-start items-center gap-2 text-[#EFEFEF] lg:text-lg md:text-base text-sm font-bold px-2
                                 hover:text-white hover:font-medium hover:pl-2 duration-300`}>
                                 <TbMapPinSearch className="w-5 h-5 mt-0.5"/>

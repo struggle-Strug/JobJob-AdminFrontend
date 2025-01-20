@@ -20,6 +20,7 @@ const Login = () => {
         const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/adminuser/login`, data)
         if(res.data.error) return message.error(res.data.message)
         message.success(res.data.message)
+        localStorage.setItem("token", res.data.token)
         navigate("/admin")
     }
     return (
