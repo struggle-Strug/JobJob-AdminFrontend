@@ -44,6 +44,10 @@
     font-family: 'Noto Sans JP', sans-serif;
 }
 
+.ant-btn, .ant-btn * {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
 .ant-radio-wrapper, .ant-radio-wrapper * {
     font-family: 'Noto Sans JP', sans-serif;
 }

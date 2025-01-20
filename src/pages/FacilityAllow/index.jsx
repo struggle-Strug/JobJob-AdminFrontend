@@ -83,13 +83,16 @@ const FacilityAllow = () => {
        getFacilityData();
     }, []);
     return (
-        <div className="h-screen p-6">
+        <div className="min-h-screen p-6">
             <p className="lg:text-2xl md:text-xl text-lg font-bold text-[#343434]">施設審査</p>
             <div className="p-4 mt-8">
                  <Table 
                     columns={columns} 
                     dataSource={data}
-                    pagination={false}
+                    pagination={{
+                        pageSize: 20,
+                        position: ["bottomCenter"], // Center the pagination at the bottom
+                    }}
                     bordered
                     size="middle"
                     className="[&_.ant-table-cell]:!whitespace-nowrap"

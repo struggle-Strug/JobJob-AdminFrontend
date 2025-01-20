@@ -8,6 +8,7 @@ import FacilityAllow from './pages/FacilityAllow';
 import { useEffect, useState } from 'react';
 import { useAuth } from './Context/AuthContext';
 import axios from 'axios';
+import FacilitiesManagement from './pages/FacilitiesManagement';
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
         <Route path="/admin" element={<PageLayout />}>
           <Route path="/admin/top" element={<Top />} />
           <Route path="/admin/apply" element={<ApplicationManagement />} />
+          <Route path="/admin/facility" element={<FacilitiesManagement />} />
           <Route path="/admin/examination_facility" element={<FacilityAllow />} />
         </Route>
       </Route>
