@@ -32,6 +32,12 @@ const JobPostManagement = () => {
         align: "center",
         },
         {
+        title: "下書き",
+        dataIndex: "draft",
+        key: "draft",
+        align: "center",
+        },
+        {
         title: "掲載申請中",
         dataIndex: "pending",
         key: "pending",
@@ -56,6 +62,7 @@ const JobPostManagement = () => {
         key: "1",
         role: "すべて",
         all: filteredJobPosts.length.toString(),
+        draft: filteredJobPosts.filter(jobPost => jobPost.allowed === "draft").length.toString(),
         pending: filteredJobPosts.filter(jobPost => jobPost.allowed === "pending").length.toString(),
         published: filteredJobPosts.filter(jobPost => jobPost.allowed === "allowed").length.toString(),
         completed: filteredJobPosts.filter(jobPost => jobPost.allowed === "ended").length.toString(),
@@ -64,6 +71,7 @@ const JobPostManagement = () => {
             key: index,
             role: jobType,
             all: filteredJobPosts.filter(jobPost => jobPost.type === jobType).length.toString(),
+            draft: filteredJobPosts.filter(jobPost => jobPost.allowed === "draft" && jobPost.type === jobType).length.toString(),
             pending: filteredJobPosts.filter(jobPost => jobPost.allowed === "pending" && jobPost.type === jobType).length.toString(),
             published: filteredJobPosts.filter(jobPost => jobPost.allowed === "allowed" && jobPost.type === jobType).length.toString(),
             completed: filteredJobPosts.filter(jobPost => jobPost.allowed === "ended" && jobPost.type === jobType).length.toString(),
