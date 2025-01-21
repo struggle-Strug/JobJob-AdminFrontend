@@ -70,7 +70,7 @@ const FacilitiesManagement = () => {
         facilityGenre: facility.facility_genre,
         prefecture: facility.prefecture,
         city: facility.city,
-        corporationId: facility.customer_id,
+        corporationId: facility.customer_id._id,
         publicJobCount: facility.publicJobCount,
     }));
 
@@ -78,9 +78,9 @@ const FacilitiesManagement = () => {
     const getAllFacilities = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/facility/all`);
-            const facilities = response.data.facility.filter(facility => facility.allowed === true);
+            const facilities = response.data.facility;
             setAllFacilities(facilities);
-            setFilteredFacilities(facilities); // Initially show all facilities
+            setFilteredFacilities(facilities.filter(facility => facility.allowed === "allowed")); // Initially show all facilities
         } catch (error) {
             console.error("Error fetching facilities:", error);
         }
@@ -125,10 +125,9 @@ const FacilitiesManagement = () => {
                 </div>
                 <div className="flex gap-4 mb-6 text-sm">
                     <span>すべて: {allFacilities.length}件</span>
-                    <span className="text-blue-600">下書き: NN件</span>
-                    <span className="text-blue-600">掲載申請中: NN件</span>
-                    <span className="text-blue-600">掲載中: NN件</span>
-                    <span className="text-blue-600">掲載終了: NN件</span>
+                    <span className="text-blue-600">掲載申請中: {allFacilities.filter(facility => facility.allowed === "pending").length}件</span>
+                    <span className="text-blue-600">掲載中: {allFacilities.filter(facility => facility.allowed === "allowed").length}件</span>
+                    <span className="text-blue-600">掲載終了: {allFacilities.filter(facility => facility.allowed === "ended").length}件</span>
                 </div>
 
                 <div className="border rounded-md">
