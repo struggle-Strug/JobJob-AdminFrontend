@@ -21,11 +21,11 @@ const Login = () => {
         if(res.data.error) return message.error(res.data.message)
         message.success(res.data.message)
         localStorage.setItem("token", res.data.token)
-        navigate("/admin")
+        navigate("/admin/top")
     }
     return (
         <>
-            <div className="w-full flex items-center justify-center h-screen">
+            <div className="w-full flex items-center justify-center min-h-screen">
                 <div className="flex flex-col bg-white py-4 px-6">
                     <p className="lg:text-xl md:text-lg text-base text-center">管理サイト</p>
                     <div class="relative w-80 mt-6">

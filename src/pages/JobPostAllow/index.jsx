@@ -1,10 +1,10 @@
-import { Table, Button, Space, message } from 'antd'
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import moment from 'moment';
+import { Button, message, Space, Table } from "antd";
+import axios from "axios";
+import moment from "moment";
+import { useEffect, useState } from "react";
 
-const FacilityAllow = () => {
-    const [allFacilities, setAllFacilities] = useState([]);
+const JobPostAllow = () => {
+    const [jobPosts, setJobPosts] = useState([]);
     const columns = [
         {
             title: '申請日',
@@ -13,7 +13,7 @@ const FacilityAllow = () => {
             width: 120,
         },
         {
-            title: '施設名',
+            title: '職種',
             dataIndex: 'facilityName',
             key: 'facilityName',
             width: 200,
@@ -60,31 +60,33 @@ const FacilityAllow = () => {
         },
     ]
 
-    const getFacilityData = async () => {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/facility/all`);
-        setAllFacilities(response.data.facility.filter((facility) => facility.allowed === "pending"));
+    const getJobPosts = async () => {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/jobpost`);
+        setJobPosts(response.data.jobposts.filter(jobPost => jobPost.allowed === false));
     }
 
-    const data = allFacilities?.map((facility) => ({
-        id: facility._id,
-        applicationDate: moment(facility.created_at).format('YYYY/MM/DD'),
-        facilityName: facility.name,
-        facilityId: facility.facility_id,
-        corporationId: facility.customer_id,
+    const data = jobPosts?.map((jobPost) => ({
+        id: jobPost._id,
+        applicationDate: moment(jobPost.created_at).format('YYYY/MM/DD'),
+        facilityName: jobPost.facility_id.name,
+        facilityId: jobPost.facility_id.facility_id,
+        corporationId: jobPost.customer_id._id,
     }))
 
     const handleAllow = async (id) => {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/facility/allow/${id}`);
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/jobpost/allow/${id}`);
         if(response.data.error) return message.error(response.data.message)
         message.success(response.data.message)
-        getFacilityData()
+        getJobPosts();
     }
+
     useEffect(() => {
-       getFacilityData();
+        getJobPosts();
     }, []);
+
     return (
         <div className="min-h-screen p-6">
-            <p className="lg:text-2xl md:text-xl text-lg font-bold text-[#343434]">施設審査</p>
+            <p className="lg:text-2xl md:text-xl text-lg font-bold text-[#343434]">求人審査</p>
             <div className="p-4 mt-8">
                  <Table 
                     columns={columns} 
@@ -99,7 +101,7 @@ const FacilityAllow = () => {
                 />
             </div>
         </div>
-    )
+    );
 }
 
-export default FacilityAllow;
+export default JobPostAllow;

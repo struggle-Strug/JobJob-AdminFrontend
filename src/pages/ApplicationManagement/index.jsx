@@ -1,6 +1,6 @@
 const ApplicationManagement = () => {
     return (
-        <div>
+        <div className="w-full min-h-screen">
             <h1>ApplicationManagement</h1>
         </div>
     )

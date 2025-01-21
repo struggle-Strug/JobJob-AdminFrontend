@@ -9,6 +9,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from './Context/AuthContext';
 import axios from 'axios';
 import FacilitiesManagement from './pages/FacilitiesManagement';
+import JobPostAllow from './pages/JobPostAllow';
+import JobPostManagement from './pages/JobPostManagement';
 
 
 function App() {
@@ -45,11 +47,13 @@ function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Login />} />
-        <Route path="/admin" element={<PageLayout />}>
+        <Route element={<PageLayout />}>
           <Route path="/admin/top" element={<Top />} />
           <Route path="/admin/apply" element={<ApplicationManagement />} />
           <Route path="/admin/facility" element={<FacilitiesManagement />} />
+          <Route path="/admin/recruit" element={<JobPostManagement />} />
           <Route path="/admin/examination_facility" element={<FacilityAllow />} />
+          <Route path="/admin/examination_recruit" element={<JobPostAllow />} />
         </Route>
       </Route>
     </Routes>
