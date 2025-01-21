@@ -11,6 +11,7 @@ import axios from 'axios';
 import FacilitiesManagement from './pages/FacilitiesManagement';
 import JobPostAllow from './pages/JobPostAllow';
 import JobPostManagement from './pages/JobPostManagement';
+import CustomerManagement from './pages/CustomerManagement';
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route element={<PageLayout />}>
           <Route path="/admin/top" element={<Top />} />
+          <Route path="/admin/corporation" element={<CustomerManagement />} />
           <Route path="/admin/apply" element={<ApplicationManagement />} />
           <Route path="/admin/facility" element={<FacilitiesManagement />} />
           <Route path="/admin/recruit" element={<JobPostManagement />} />
