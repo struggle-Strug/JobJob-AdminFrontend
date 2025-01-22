@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import { Button, Input, Table } from "antd";
 import moment from "moment";
@@ -75,7 +75,7 @@ const FacilitiesManagement = () => {
     }));
 
     // Fetch all facilities
-    const getAllFacilities = async () => {
+    const getAllFacilities = useCallback(async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/facility/all`);
             const facilities = response.data.facility;
@@ -84,7 +84,7 @@ const FacilitiesManagement = () => {
         } catch (error) {
             console.error("Error fetching facilities:", error);
         }
-    };
+    }, []);
 
     // Handle search
     const handleSearch = () => {

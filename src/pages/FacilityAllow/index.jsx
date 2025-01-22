@@ -1,6 +1,6 @@
 import { Table, Button, Space, message } from 'antd'
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
 
 const FacilityAllow = () => {
@@ -60,10 +60,10 @@ const FacilityAllow = () => {
         },
     ]
 
-    const getFacilityData = async () => {
+    const getFacilityData = useCallback(async () => {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/facility/all`);
         setAllFacilities(response.data.facility.filter((facility) => facility.allowed === "pending"));
-    }
+    }, []);
 
     const data = allFacilities?.map((facility) => ({
         id: facility._id,

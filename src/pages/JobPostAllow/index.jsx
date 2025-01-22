@@ -1,7 +1,7 @@
 import { Button, message, Space, Table } from "antd";
 import axios from "axios";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const JobPostAllow = () => {
     const [jobPosts, setJobPosts] = useState([]);
@@ -60,10 +60,10 @@ const JobPostAllow = () => {
         },
     ]
 
-    const getJobPosts = async () => {
+    const getJobPosts = useCallback(async () => {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/jobpost`);
         setJobPosts(response.data.jobposts.filter(jobPost => jobPost.allowed === false));
-    }
+    }, []);
 
     const data = jobPosts?.map((jobPost) => ({
         id: jobPost._id,
