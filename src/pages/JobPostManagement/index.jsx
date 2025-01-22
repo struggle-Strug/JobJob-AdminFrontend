@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Button, Table } from "antd";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { JobType } from "../../utils/constants/categories";
 
 const JobPostManagement = () => {
@@ -80,11 +80,11 @@ const JobPostManagement = () => {
 
 
 
-    const getJobPosts = async () => {
+    const getJobPosts = useCallback(async () => {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/jobpost`);
         setAllJobPosts(response.data.jobposts);
         setFilteredJobPosts(response.data.jobposts);
-    }
+    }, []);
 
     useEffect(() => {
         getJobPosts();

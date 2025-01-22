@@ -2,7 +2,7 @@ import { Button, Input, Space, Table } from "antd";
 import axios from "axios";
 import { Download } from "lucide-react";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const CustomerManagement = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -90,14 +90,14 @@ const CustomerManagement = () => {
         jobpostCount: jobposts.filter(jobpost => jobpost.customer_id === customer._id).length,
     }));
 
-    const getAllCustomers = async () => {
+    const getAllCustomers = useCallback(async () => {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/customers/all`);
         const customers = response.data.customers;
         setAllCustomers(customers);
         setFilteredCustomers(customers.filter(customer => customer.allowed === true).sort((a, b) => new Date(a.registrationDate) - new Date(b.registrationDate)));
         setFacilities(response.data.facilities);
         setJobposts(response.data.jobposts);
-    }
+    }, []);
 
     const handleSearch = () => {
         const filteredData = allCustomers.filter(customer => 
