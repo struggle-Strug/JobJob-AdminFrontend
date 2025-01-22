@@ -45,7 +45,7 @@ const FacilityAllow = () => {
                     <Button 
                         type="primary"
                         className="bg-blue-100 text-blue-600 border-blue-200 hover:bg-blue-200"
-                        onClick={() => handleAllow(record.id)}
+                        onClick={() => handleAllow(record.facilityId)}
                     >
                         掲載OK
                     </Button>
