@@ -62,7 +62,7 @@ const JobPostAllow = () => {
 
     const getJobPosts = useCallback(async () => {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/jobpost`);
-        setJobPosts(response.data.jobposts.filter(jobPost => jobPost.allowed === false));
+        setJobPosts(response.data.jobposts.filter(jobPost => jobPost.allowed === "pending"));
     }, []);
 
     const data = jobPosts?.map((jobPost) => ({
@@ -70,7 +70,7 @@ const JobPostAllow = () => {
         applicationDate: moment(jobPost.created_at).format('YYYY/MM/DD'),
         facilityName: jobPost.facility_id.name,
         facilityId: jobPost.facility_id.facility_id,
-        corporationId: jobPost.customer_id._id,
+        corporationId: jobPost.customer_id.customer_id,
     }))
 
     const handleAllow = async (id) => {
