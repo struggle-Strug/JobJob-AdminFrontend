@@ -13,6 +13,10 @@ import JobPostAllow from "./pages/JobPostAllow";
 import JobPostManagement from "./pages/JobPostManagement";
 import CustomerManagement from "./pages/CustomerManagement";
 import MembersManagement from "./pages/MembersManagement";
+import Setting from "./pages/Setting";
+import LoginIDChange from "./pages/Setting/LoginIDChange";
+import PasswordChange from "./pages/Setting/PasswordChange";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const { setIsAuthenticated, setAdmin, admin } = useAuth();
@@ -22,9 +26,9 @@ function App() {
   const getUserData = async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/adminuser/tokenlogin`
+        `${process.env.REACT_APP_API_URL}/api/v1/user/tokenlogin`
       );
-      setAdmin(res.data.admin);
+      setAdmin(res.data.user.data);
       setIsAuthenticated(true);
     } catch (err) {
       console.error("Failed to fetch user data:", err);
@@ -41,7 +45,7 @@ function App() {
     } else {
       setIsLoading(false); // No token, skip loading
     }
-  }, []);
+  }, [token]);
 
   if (isLoading) {
     return <div>Loading...</div>; // Show a spinner or loading indicator
@@ -62,6 +66,10 @@ function App() {
           />
           <Route path="/admin/examination_recruit" element={<JobPostAllow />} />
           <Route path="/admin/member/" element={<MembersManagement />} />
+          <Route path="/admin/settings/" element={<Setting />} />
+          <Route path="/admin/settings/loginId" element={<LoginIDChange />} />
+          <Route path="/admin/settings/pass" element={<PasswordChange />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Route>
     </Routes>
