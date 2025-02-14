@@ -3,6 +3,7 @@ import axios from "axios";
 import { Download } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import MemberDetailModal from "../ApplicationManagement/MemberDetailModal";
+import moment from "moment";
 
 const MembersManagement = () => {
   const [members, setMembers] = useState([]);
@@ -56,7 +57,11 @@ const MembersManagement = () => {
           </Button>
           <Button
             type="primary"
-            className="bg-[#FF2A3B] text-[#343434] border-blue-200 hover:bg-blue-200"
+            className={`${
+              record.member.deleted
+                ? "bg-blue-100 text-blue-600"
+                : "bg-[#FF2A3B] text-[#343434]"
+            }  border-blue-200 hover:bg-blue-200`} // Added space before `text-[#343434]`
             onClick={() => handleStopMember(record.member.member_id)}
           >
             {record.member.deleted ? "休止を解除" : "休止する"}
@@ -70,7 +75,7 @@ const MembersManagement = () => {
   const data = members.map((member, index) => ({
     key: index,
     member: member,
-    registrationDate: member.created_at,
+    registrationDate: moment(member.created_at).format("YYYY-MM-DD"),
     memberName: member.name,
     email: member.email,
     phoneNumber: member.phoneNumber,
