@@ -146,7 +146,7 @@ const CustomerManagement = () => {
   return (
     <div className="min-h-screen p-6">
       <p className="lg:text-2xl md:text-xl text-lg font-bold text-[#343434]">
-        施設管理
+        法人管理
       </p>
       <div className="p-4 mt-8">
         <div className="flex items-center gap-4 mb-6">
