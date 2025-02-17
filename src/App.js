@@ -1,5 +1,7 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { Suspense, lazy, useEffect, useState } from "react";
+import { useAuth } from "./Context/AuthContext";
+import axios from "axios";
 const Login = lazy(() => import("./pages/Login"));
 const Layout = lazy(() => import("./Components/Layout"));
 const PageLayout = lazy(() => import("./Components/PageLayout"));
