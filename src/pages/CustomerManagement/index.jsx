@@ -103,7 +103,7 @@ const CustomerManagement = () => {
     setAllCustomers(customers);
     setFilteredCustomers(
       customers
-        .filter((customer) => customer.allowed === true)
+        // .filter((customer) => customer.allowed === true)
         .sort(
           (a, b) => new Date(a.registrationDate) - new Date(b.registrationDate)
         )

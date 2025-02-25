@@ -7,7 +7,6 @@ import { useAuth } from "../../Context/AuthContext";
 
 const LoginIDChange = () => {
   const { admin } = useAuth();
-  console.log(admin);
 
   const [loginId, setLoginId] = useState("");
   const navigate = useNavigate();

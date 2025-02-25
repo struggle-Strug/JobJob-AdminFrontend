@@ -1,5 +1,7 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { Suspense, lazy, useEffect, useState } from "react";
+import { useAuth } from "./Context/AuthContext";
+import axios from "axios";
 const Login = lazy(() => import("./pages/Login"));
 const Layout = lazy(() => import("./Components/Layout"));
 const PageLayout = lazy(() => import("./Components/PageLayout"));
@@ -17,7 +19,7 @@ const Setting = lazy(() => import("./pages/Setting"));
 const LoginIDChange = lazy(() => import("./pages/Setting/LoginIDChange"));
 const PasswordChange = lazy(() => import("./pages/Setting/PasswordChange"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const Loading = lazy(() => import("./components/Loading"));
+const Loading = lazy(() => import("./Components/Loading"));
 
 function App() {
   const { setIsAuthenticated, setAdmin, admin } = useAuth();
