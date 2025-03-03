@@ -112,6 +112,7 @@ const MembersManagement = () => {
   useEffect(() => {
     document.title = "CS会員管理";
     getAllMembers();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
   return (
     <div className="min-h-screen p-6">

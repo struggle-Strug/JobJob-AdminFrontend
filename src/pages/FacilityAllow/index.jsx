@@ -88,6 +88,7 @@ const FacilityAllow = () => {
   useEffect(() => {
     document.title = "施設調査";
     getFacilityData();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
   return (
     <div className="min-h-screen p-6">

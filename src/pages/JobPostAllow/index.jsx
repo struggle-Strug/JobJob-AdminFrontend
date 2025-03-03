@@ -87,6 +87,7 @@ const JobPostAllow = () => {
   useEffect(() => {
     document.title = "求人調査";
     getJobPosts();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   return (

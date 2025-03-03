@@ -31,6 +31,7 @@ const ApplicationManagement = () => {
 
   useEffect(() => {
     getJobNumbersByStatus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
   return (
     <>
