@@ -23,6 +23,7 @@ const LoginIDChange = () => {
 
   useEffect(() => {
     document.title = "ログインID変更";
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
   return (
     <>

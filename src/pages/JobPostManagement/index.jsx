@@ -115,6 +115,7 @@ const JobPostManagement = () => {
   useEffect(() => {
     document.title = "求人管理";
     getJobPosts();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   useEffect(() => {

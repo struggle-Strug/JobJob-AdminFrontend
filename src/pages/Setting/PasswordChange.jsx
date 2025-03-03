@@ -30,6 +30,7 @@ const PasswordChange = () => {
 
   useEffect(() => {
     document.title = "パスワード変更";
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
   return (
     <div className="bg-white min-h-screen p-8 rounded-lg">

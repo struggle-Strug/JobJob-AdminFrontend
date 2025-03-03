@@ -102,6 +102,7 @@ const FacilitiesManagement = () => {
   useEffect(() => {
     document.title = "施設管理";
     getAllFacilities();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   return (
