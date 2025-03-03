@@ -79,7 +79,7 @@ const FacilityAllow = () => {
 
   const handleAllow = async (id) => {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/v1/facility/allow/${id}`
+      `${process.env.REACT_APP_API_URL}/api/v1/facility/${id}/allowed`
     );
     if (response.data.error) return message.error(response.data.message);
     message.success(response.data.message);
