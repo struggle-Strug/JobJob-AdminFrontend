@@ -45,11 +45,14 @@ const JobPostAllow = () => {
           <Button
             type="primary"
             className="bg-blue-100 text-blue-600 border-blue-200 hover:bg-blue-200"
-            onClick={() => handleAllow(record.id)}
+            onClick={() => handleAllow(record.id, "allowed")}
           >
             掲載OK
           </Button>
-          <Button className="bg-blue-100 text-blue-600 border-blue-200 hover:bg-blue-200">
+          <Button
+            className="bg-blue-100 text-blue-600 border-blue-200 hover:bg-blue-200"
+            onClick={() => handleAllow(record.id, "draft")}
+          >
             差し戻し
           </Button>
         </Space>
@@ -75,9 +78,9 @@ const JobPostAllow = () => {
     corporationId: jobPost.customer_id.customer_id,
   }));
 
-  const handleAllow = async (id) => {
+  const handleAllow = async (id, status) => {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/v1/jobpost/allow/${id}`
+      `${process.env.REACT_APP_API_URL}/api/v1/jobpost/${id}/${status}`
     );
     if (response.data.error) return message.error(response.data.message);
     message.success(response.data.message);

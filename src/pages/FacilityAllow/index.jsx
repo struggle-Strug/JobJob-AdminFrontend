@@ -45,11 +45,14 @@ const FacilityAllow = () => {
           <Button
             type="primary"
             className="bg-blue-100 text-blue-600 border-blue-200 hover:bg-blue-200"
-            onClick={() => handleAllow(record.facilityId)}
+            onClick={() => handleAllow(record.facilityId, "allowed")}
           >
             掲載OK
           </Button>
-          <Button className="bg-blue-100 text-blue-600 border-blue-200 hover:bg-blue-200">
+          <Button
+            className="bg-blue-100 text-blue-600 border-blue-200 hover:bg-blue-200"
+            onClick={() => handleAllow(record.facilityId, "draft")}
+          >
             差し戻し
           </Button>
         </Space>
@@ -77,9 +80,9 @@ const FacilityAllow = () => {
     corporationId: facility.customer_id,
   }));
 
-  const handleAllow = async (id) => {
+  const handleAllow = async (id, status) => {
     const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/v1/facility/${id}/allowed`
+      `${process.env.REACT_APP_API_URL}/api/v1/facility/${id}/${status}`
     );
     if (response.data.error) return message.error(response.data.message);
     message.success(response.data.message);
