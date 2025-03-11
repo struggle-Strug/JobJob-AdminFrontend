@@ -71,7 +71,7 @@ const JobPostAllow = () => {
   }, []);
 
   const data = jobPosts?.map((jobPost) => ({
-    id: jobPost._id,
+    id: jobPost.customer_id,
     applicationDate: moment(jobPost.created_at).format("YYYY/MM/DD"),
     facilityName: jobPost.facility_id.name,
     facilityId: jobPost.facility_id.facility_id,
