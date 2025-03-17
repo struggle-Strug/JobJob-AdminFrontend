@@ -152,7 +152,7 @@ const FacilityAllow = () => {
               <div className="flex flex-col items-start justify-start w-full">
                 <div className="flex relative flex-col items-center justify-between bg-white rounded-2xl p-6 w-full shadow-2xl hover:scale-[1.02] duration-300">
                   <img
-                    src={allFacilities[selectedIndex].photo}
+                    src={allFacilities[selectedIndex].photo[0]}
                     alt="arrow-down"
                     className="w-full rounded-lg aspect-video object-cover "
                   />
