@@ -99,7 +99,11 @@ const FacilityAllow = () => {
       `${process.env.REACT_APP_API_URL}/api/v1/facility/${id}/${status}`
     );
     if (response.data.error) return message.error(response.data.message);
-    message.success(response.data.message);
+    if (status === "allowed") {
+      message.success("施設掲載OK成功");
+    } else {
+      message.success("施設差し戻し成功");
+    }
     getFacilityData();
   };
 
