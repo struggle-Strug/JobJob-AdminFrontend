@@ -83,7 +83,11 @@ const JobPostAllow = () => {
       `${process.env.REACT_APP_API_URL}/api/v1/jobpost/${id}/${status}`
     );
     if (response.data.error) return message.error(response.data.message);
-    message.success(response.data.message);
+    if (status === "allowed") {
+      message.success("求人掲載OK成功");
+    } else {
+      message.success("求人差し戻し成功");
+    }
     getJobPosts();
   };
 
