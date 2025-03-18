@@ -77,7 +77,7 @@ const FacilityAllow = () => {
 
   const getFacilityData = useCallback(async () => {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/v1/facility/all`
+      `${process.env.REACT_APP_API_URL}/api/v1/facility/request`
     );
     setAllFacilities(
       response.data.facility.filter(
@@ -151,11 +151,19 @@ const FacilityAllow = () => {
             <div className="container flex justify-between gap-8">
               <div className="flex flex-col items-start justify-start w-full">
                 <div className="flex relative flex-col items-center justify-between bg-white rounded-2xl p-6 w-full shadow-2xl hover:scale-[1.02] duration-300">
-                  <img
-                    src={allFacilities[selectedIndex].photo}
-                    alt="arrow-down"
-                    className="w-full rounded-lg aspect-video object-cover "
-                  />
+                  {allFacilities[selectedIndex].photo.length === 0 ? (
+                    <img
+                      src={"/assets/images/noimage.png"}
+                      alt="arrow-down"
+                      className="w-full rounded-lg aspect-video object-cover "
+                    />
+                  ) : (
+                    <img
+                      src={allFacilities[selectedIndex].photo}
+                      alt="arrow-down"
+                      className="w-full rounded-lg aspect-video object-cover "
+                    />
+                  )}
                   <div className="flex flex-col items-start justify-start p-4 w-full h-full gap-4">
                     <p className="lg:text-xl md:text-sm text-[#343434]">
                       <span className="lg:text-2xl md:text-xl font-bold">
@@ -164,6 +172,9 @@ const FacilityAllow = () => {
                       <span className="text-base">の求人情報</span>
                     </p>
                     <div>
+                      <p className="lg:text-sm md:text-xs text-[#343434]">
+                        〒{allFacilities[selectedIndex].postal_code}
+                      </p>
                       <p className="lg:text-sm md:text-xs text-[#343434]">
                         {allFacilities[selectedIndex].prefecture}
                         {allFacilities[selectedIndex].city}
@@ -215,9 +226,12 @@ const FacilityAllow = () => {
                       施設紹介
                     </p>
                     <p className="lg:text-base text-sm text-[#343434] w-4/5">
-                      <pre>{allFacilities[selectedIndex].introduction}</pre>
+                      <pre className="w-full break-words overflow-auto whitespace-normal">
+                        {allFacilities[selectedIndex].introduction}
+                      </pre>
                     </p>
                   </div>
+
                   <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
                     <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
                       アクセス
@@ -286,7 +300,7 @@ const FacilityAllow = () => {
                           "-"
                         )[1]
                       }
-                      日
+                      月
                     </p>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
