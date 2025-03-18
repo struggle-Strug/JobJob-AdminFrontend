@@ -14,8 +14,8 @@ const JobPostAllow = () => {
     },
     {
       title: "職種",
-      dataIndex: "facilityName",
-      key: "facilityName",
+      dataIndex: "jobType",
+      key: "jobType",
       width: 200,
     },
     {
@@ -73,7 +73,7 @@ const JobPostAllow = () => {
   const data = jobPosts?.map((jobPost) => ({
     id: jobPost.jobpost_id,
     applicationDate: moment(jobPost.created_at).format("YYYY/MM/DD"),
-    facilityName: jobPost.facility_id.name,
+    jobType: jobPost.type,
     facilityId: jobPost.facility_id.facility_id,
     corporationId: jobPost.customer_id.customer_id,
   }));
