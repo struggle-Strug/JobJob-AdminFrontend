@@ -1,10 +1,56 @@
-import { Button, message, Space, Table } from "antd";
+import { Button, message, Modal, Space, Table } from "antd";
 import axios from "axios";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Facilities } from "../../utils/constants/categories";
+import { getJobValueByKey } from "../../utils/getFunctions";
 
 const JobPostAllow = () => {
   const [jobPosts, setJobPosts] = useState([]);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const jobMapping = {
+    医師: "/dr",
+    薬剤師: "/ph",
+    "看護師/准看護師": "/nan",
+    助産師: "/mw",
+    保健師: "/phn",
+    看護助手: "/nuas",
+    診療放射線技師: "/mrt",
+    臨床検査技師: "/clt",
+    "管理栄養士/栄養士": "/rdn",
+    "公認心理師/臨床心理士": "/cp",
+    医療ソーシャルワーカー: "/msw",
+    歯科医師: "/de",
+    歯科衛生士: "/dh",
+    歯科技工士: "/dt",
+    歯科助手: "/deas",
+    "介護職/ヘルパー": "/cwh",
+    生活相談員: "/lc",
+    ケアマネジャー: "/cm",
+    "管理職（介護）": "/mp",
+    サービス提供責任者: "/sp",
+    生活支援員: "/lsw",
+    福祉用具専門相談員: "/wesc",
+    児童発達支援管理責任者: "/cdsm",
+    保育士: "/chil",
+    幼稚園教諭: "/kt",
+    保育補助: "/ca",
+    "児童指導員/指導員": "/cii",
+    理学療法士: "/pt",
+    言語聴覚士: "/st",
+    作業療法士: "/ot",
+    視能訓練士: "/ort",
+    "調理師/調理スタッフ": "/ccs",
+    美容師: "/hai",
+    理容師: "/bar",
+    ネイリスト: "/naar",
+    アイリスト: "/el",
+    "エステティシャン/セラピスト": "/et",
+    美容部員: "/bcm",
+    インストラクター: "/ins",
+  };
   const columns = [
     {
       title: "申請日",
@@ -34,7 +80,14 @@ const JobPostAllow = () => {
       title: "プレビュー",
       dataIndex: "preview",
       key: "preview",
-      render: () => <a className="text-blue-500 hover:underline">プレビュー</a>,
+      render: (_, record, index) => (
+        <a
+          className="text-blue-500 hover:underline"
+          onClick={() => handlePreview(index)}
+        >
+          プレビュー
+        </a>
+      ),
       width: 100,
     },
     {
@@ -91,6 +144,11 @@ const JobPostAllow = () => {
     getJobPosts();
   };
 
+  const handlePreview = (index) => {
+    setSelectedIndex(index); // Set the selected facility index
+    setIsModalVisible(true); // Show the modal
+  };
+
   useEffect(() => {
     document.title = "求人調査";
     getJobPosts();
@@ -115,6 +173,404 @@ const JobPostAllow = () => {
           className="[&_.ant-table-cell]:!whitespace-nowrap"
         />
       </div>
+      {/* Modal for Preview */}
+      <Modal
+        title="求人プレビュー"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={[
+          <Button key="close" onClick={() => setIsModalVisible(false)}>
+            閉じる
+          </Button>,
+        ]}
+        width={1200} // Adjust the width as needed
+        className="modal"
+      >
+        {selectedIndex !== null && jobPosts[selectedIndex] ? (
+          <div className="flex p-8">
+            <div className="container">
+              <div className="flex flex-col">
+                <div className="flex flex-col bg-white p-4 rounded-lg">
+                  {jobPosts[selectedIndex]?.picture.length === 0 ? (
+                    <img
+                      src={"/assets/images/noimage.png"}
+                      alt={jobPosts[selectedIndex]?.sub_title}
+                      className="w-2/3 object-cover rounded-lg"
+                    />
+                  ) : (
+                    <img
+                      src={jobPosts[selectedIndex]?.picture[0]}
+                      alt={jobPosts[selectedIndex]?.sub_title}
+                      className="w-2/3 aspect-[2/1] object-cover rounded-lg"
+                    />
+                  )}
+                </div>
+                <div className="flex flex-col bg-white p-4 rounded-lg">
+                  <p className="lg:text-lg font-bold text-sm text-[#343434]">
+                    {jobPosts[selectedIndex]?.sub_title}
+                  </p>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: jobPosts[selectedIndex]?.sub_description,
+                    }}
+                    className="p-2 lg:text-base text-sm mt-8 text-[#343434]"
+                  />
+                </div>
+                <div className="flex flex-col bg-white px-4 rounded-lg mt-4">
+                  <p className="lg:text-lg text-sm text-[#343434] font-bold py-6 border-b-[1px] border-[#e7e7e7]">
+                    募集内容
+                  </p>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      募集職種
+                    </p>
+                    <p className="lg:text-base text-sm text-[#343434] py-6 w-4/5">
+                      {jobPosts[selectedIndex]?.type}
+                    </p>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      仕事内容
+                    </p>
+                    <pre className="break-words lg:text-base text-sm text-[#343434] py-6 w-4/5 overflow-x-auto whitespace-pre-wrap">
+                      {jobPosts[selectedIndex]?.work_content}
+                    </pre>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      診療科目・
+                      <br />
+                      サービス形態{" "}
+                    </p>
+                    <div className="inline-block items-start justify-start gap-2 w-4/5 py-6">
+                      {jobPosts[selectedIndex]?.service_subject
+                        .concat(jobPosts[selectedIndex]?.service_type)
+                        .map((item, index) => {
+                          return (
+                            <div
+                              key={index}
+                              className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                            >
+                              <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
+                                {item}
+                              </p>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      給与
+                    </p>
+                    <p className="lg:text-base text-sm text-[#343434] py-6 w-4/5">{`【${jobPosts[selectedIndex]?.employment_type}】 ${jobPosts[selectedIndex]?.salary_type} ${jobPosts[selectedIndex]?.salary_min}円〜${jobPosts[selectedIndex]?.salary_max}円`}</p>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      給与の備考
+                    </p>
+                    <p className="lg:text-base text-sm text-[#343434] py-6 w-4/5">
+                      <pre>{jobPosts[selectedIndex]?.salary_remarks}</pre>
+                    </p>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      教育体制・研修
+                    </p>
+                    <div className="inline-block items-start justify-start gap-2 w-4/5 py-6">
+                      {jobPosts[selectedIndex]?.education_content.map(
+                        (item, index) => {
+                          return (
+                            <div
+                              key={index}
+                              className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                            >
+                              <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
+                                {item}
+                              </p>
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      勤務時間
+                    </p>
+                    <div className="flex flex-col w-4/5 py-6">
+                      <div className="inline-block items-start justify-start gap-2">
+                        {jobPosts[selectedIndex]?.work_time_type.map(
+                          (item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                              >
+                                <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
+                                  {item}
+                                </p>
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                      <p className="lg:text-base text-sm text-[#343434] mt-4">
+                        <pre>{jobPosts[selectedIndex]?.work_time_content}</pre>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      休日
+                    </p>
+                    <div className="flex flex-col w-4/5 py-6">
+                      <div className="inline-block items-start justify-start gap-2">
+                        {jobPosts[selectedIndex]?.rest_type.map(
+                          (item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                              >
+                                <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
+                                  {item}
+                                </p>
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                      <p className="lg:text-base text-sm text-[#343434] mt-4">
+                        <pre>{jobPosts[selectedIndex]?.rest_content}</pre>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      応募要件
+                    </p>
+                    <div className="flex flex-col w-4/5 py-6">
+                      <div className="inline-block items-start justify-start gap-2">
+                        {jobPosts[selectedIndex]?.qualification_type
+                          .concat(jobPosts[selectedIndex]?.qualification_other)
+                          .map((item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                              >
+                                <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
+                                  {item}
+                                </p>
+                              </div>
+                            );
+                          })}
+                      </div>
+                      <p className="lg:text-base text-sm text-[#343434] mt-4">
+                        <pre>
+                          {jobPosts[selectedIndex]?.qualification_content}
+                        </pre>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      歓迎要件
+                    </p>
+                    <div className="flex flex-col w-4/5 py-6">
+                      <p className="lg:text-base text-sm text-[#343434]">
+                        <pre>
+                          {jobPosts[selectedIndex]?.qualification_welcome}
+                        </pre>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start justify-start">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      選考プロセス
+                    </p>
+                    <p className="lg:text-base text-sm text-[#343434] py-6 w-4/5">
+                      <pre>{jobPosts[selectedIndex]?.process}</pre>
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-col bg-white p-4 rounded-lg mt-8">
+                  <p className="lg:text-lg font-bold text-sm text-[#343434]">
+                    写真
+                  </p>
+                  <div className="flex items-start justify-start gap-2 py-4">
+                    {jobPosts[selectedIndex]?.picture?.length > 0 &&
+                      jobPosts[selectedIndex]?.picture?.map((item, index) => {
+                        return (
+                          <img
+                            key={index}
+                            src={item}
+                            alt="jobpost"
+                            className="w-1/3 aspect-[2/1] object-cover rounded-lg"
+                          />
+                        );
+                      })}
+                  </div>
+                </div>
+                <div className="flex flex-col bg-white px-4 rounded-lg mt-8">
+                  <p className="lg:text-lg font-bold text-sm text-[#343434] border-b-[1px] py-6 border-[#e7e7e7]">
+                    事業所情報
+                  </p>
+                  <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
+                      法人・施設名
+                    </p>
+                    <Link
+                      to={`/facility/details/${jobPosts[selectedIndex]?.facility_id.facility_id}`}
+                      className="lg:text-base text-sm text-[#FF2A3B] hover:underline w-4/5"
+                    >
+                      {jobPosts[selectedIndex]?.facility_id.name}
+                    </Link>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
+                      募集職種
+                    </p>
+                    <div className="flex flex-col items-start, justify-start w-4/5">
+                      {jobPosts?.map((jobPost, index) => {
+                        return (
+                          <Link
+                            key={index}
+                            to={`${jobMapping[jobPosts[selectedIndex]?.type]}`}
+                            className="lg:text-base text-sm text-[#FF2A3B] hover:underline"
+                          >
+                            {jobPosts[selectedIndex]?.type}(
+                            {jobPosts[selectedIndex]?.employment_type})
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
+                      施設紹介
+                    </p>
+                    <p className="lg:text-base text-sm text-[#343434] w-4/5">
+                      <pre>
+                        {jobPosts[selectedIndex]?.facility_id.introduction}
+                      </pre>
+                    </p>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
+                      アクセス
+                    </p>
+                    <div className="flex flex-col items-start justify-start w-4/5">
+                      <div className="inline-block items-start justify-start gap-2">
+                        {jobPosts[selectedIndex]?.facility_id.access.map(
+                          (item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                              >
+                                <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
+                                  {item}
+                                </p>
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                      <p className="lg:text-base text-sm text-[#343434] mt-1">
+                        {jobPosts[selectedIndex]?.facility_id.prefecture}
+                        {jobPosts[selectedIndex]?.facility_id.city}
+                        {jobPosts[selectedIndex]?.facility_id.village}
+                        {jobPosts[selectedIndex]?.facility_id.building}
+                      </p>
+                      <div className="w-full py-4 aspect-square">
+                        <iframe
+                          title="Google Map"
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          loading="lazy"
+                          allowFullScreen
+                          src={`https://www.google.com/maps?q=${jobPosts[selectedIndex]?.facility_id.prefecture}${jobPosts[selectedIndex]?.facility_id.city}${jobPosts[selectedIndex]?.facility_id.village}${jobPosts[selectedIndex]?.facility_id.building}&output=embed`}
+                        ></iframe>
+                      </div>
+                      <p className="lg:text-base text-sm text-[#343434] mt-1">
+                        {jobPosts[selectedIndex]?.facility_id.access_text}
+                      </p>
+                      <Link
+                        to={`https://www.google.com/maps?q=${encodeURIComponent(
+                          `${jobPosts[selectedIndex]?.facility_id.prefecture}${jobPosts[selectedIndex]?.facility_id.city}${jobPosts[selectedIndex]?.facility_id.village}${jobPosts[selectedIndex]?.facility_id.building}`
+                        )}`}
+                        target="_blank"
+                        className="lg:text-base text-sm text-[#FF2A3B] hover:underline mt-1 border-[1px] border-[#FF2A3B] py-1 px-2 rounded-lg"
+                      >
+                        Google Mapsで見る
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
+                      設立年月日
+                    </p>
+                    <p className="lg:text-base text-sm text-[#343434] w-4/5">
+                      {
+                        jobPosts[
+                          selectedIndex
+                        ]?.facility_id.establishment_date.split("-")[0]
+                      }
+                      年
+                      {
+                        jobPosts[
+                          selectedIndex
+                        ]?.facility_id.establishment_date.split("-")[1]
+                      }
+                      日
+                    </p>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
+                      施設
+                    </p>
+                    <div className="flex flex-col items-start justify-start w-4/5">
+                      <Link
+                        to={`/${
+                          Facilities[
+                            jobPosts[selectedIndex]?.facility_id.facility_genre
+                          ]
+                        }`}
+                        className="lg:text-base text-sm text-[#FF2A3B] hover:underline"
+                      >
+                        {jobPosts[selectedIndex]?.facility_id.facility_genre}
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
+                      営業時間
+                    </p>
+                    <p className="lg:text-base text-sm text-[#343434] w-4/5">
+                      <pre>
+                        {jobPosts[selectedIndex]?.facility_id.service_time}
+                      </pre>
+                    </p>
+                  </div>
+                  <div className="flex items-start justify-start py-6">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
+                      休日
+                    </p>
+                    <p className="lg:text-base text-sm text-[#343434] w-4/5">
+                      <pre>{jobPosts[selectedIndex]?.facility_id.rest_day}</pre>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
+      </Modal>
     </div>
   );
 };
