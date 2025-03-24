@@ -75,6 +75,7 @@ const MembersManagement = () => {
   const data = members.map((member, index) => ({
     key: index,
     member: member,
+    memberId: member.member_id,
     registrationDate: moment(member.created_at).format("YYYY-MM-DD"),
     memberName: member.name,
     email: member.email,
