@@ -11,6 +11,9 @@
 # production
 /build
 
+#upload
+/upload.py
+
 # misc
 .DS_Store
 .env
