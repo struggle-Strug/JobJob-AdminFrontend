@@ -81,7 +81,7 @@ const [currentSlide, setCurrentSlide] = useState(0);
 const getFacilityData = useCallback(async () => {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/v1/facility/all`
+      `${process.env.REACT_APP_API_URL}/api/v1/facility/request`
     );
     setAllFacilities(
       response.data.facility.filter(
@@ -242,6 +242,9 @@ const getFacilityData = useCallback(async () => {
                     </p>
                     <div>
                       <p className="lg:text-sm md:text-xs text-[#343434]">
+                        〒{allFacilities[selectedIndex].postal_code}
+                      </p>
+                      <p className="lg:text-sm md:text-xs text-[#343434]">
                         {allFacilities[selectedIndex].prefecture}
                         {allFacilities[selectedIndex].city}
                         {allFacilities[selectedIndex].village}
@@ -298,6 +301,7 @@ const getFacilityData = useCallback(async () => {
   {allFacilities[selectedIndex].introduction}
 </div>
                   </div>
+
                   <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
                     <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
                       アクセス
@@ -366,7 +370,7 @@ const getFacilityData = useCallback(async () => {
                           "-"
                         )[1]
                       }
-                      日
+                      月
                     </p>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
