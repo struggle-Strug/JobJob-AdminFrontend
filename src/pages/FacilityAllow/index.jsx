@@ -1,6 +1,6 @@
-import { Table, Button, Space, message, Modal } from "antd";
+import { Table, Button, Space, message, Modal, Carousel } from "antd";
 import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 
@@ -11,7 +11,8 @@ const FacilityAllow = () => {
   const [allFacilities, setAllFacilities] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null); // Store the selected facility index
   const [isModalVisible, setIsModalVisible] = useState(false); // Control modal visibility
-
+const [currentSlide, setCurrentSlide] = useState(0);
+  const carouselRef = useRef();
   const columns = [
     {
       title: "申請日",
@@ -75,16 +76,38 @@ const FacilityAllow = () => {
     },
   ];
 
-  const getFacilityData = useCallback(async () => {
+  const [error, setError] = useState(null);
+
+const getFacilityData = useCallback(async () => {
+  try {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/facility/all`
     );
     setAllFacilities(
       response.data.facility.filter(
-        (facility) => facility.allowed === "pending"
+        (facility) => facility.allowed === "allowed"
       )
     );
-  }, []);
+    setError(null); // 正常に取得できた場合、エラー状態をリセット
+  } catch (error) {
+    console.error("Error fetching facility data:", error);
+
+    // error.response を使って、エラーのステータスに応じたメッセージを設定
+    if (error.response) {
+      if (error.response.status === 404) {
+        setError("施設データが見つかりません。URLを確認してください。");
+      } else {
+        setError(
+          `データ取得に失敗しました。ステータスコード: ${error.response.status}`
+        );
+      }
+    } else {
+      setError("ネットワークエラーが発生しました。しばらくしてから再度お試しください。");
+    }
+  }
+}, []);
+
+  
 
   const data = allFacilities?.map((facility) => ({
     id: facility._id,
@@ -151,11 +174,65 @@ const FacilityAllow = () => {
             <div className="container flex justify-between gap-8">
               <div className="flex flex-col items-start justify-start w-full">
                 <div className="flex relative flex-col items-center justify-between bg-white rounded-2xl p-6 w-full shadow-2xl hover:scale-[1.02] duration-300">
+                  <div className="relative w-full">
+          <Carousel
+            ref={carouselRef}
+            dots={false}
+            beforeChange={(_, next) => setCurrentSlide(next)}
+            
+          >
+            {allFacilities[selectedIndex]?.photo?.length > 0 ? (
+              allFacilities[selectedIndex].photo.map((photoUrl, index) => (
+                <div key={index}>
                   <img
-                    src={allFacilities[selectedIndex].photo[0]}
-                    alt="arrow-down"
-                    className="w-full rounded-lg aspect-video object-cover "
+                    src={photoUrl}
+                    alt={`facility-photo-${index}`}
+                    className="w-full aspect-video object-cover rounded-t-xl"
                   />
+                </div>
+              ))
+            ) : (
+              <div>
+                <img
+                  src="/assets/images/noimage.png"
+                  alt="no-image"
+                  className="w-full aspect-video object-cover"
+                />
+              </div>
+            )}
+          </Carousel>
+          {/* スライドインジケーター（画像上に表示） */}
+          {allFacilities[selectedIndex]?.photo?.length > 0 && (
+            <div className="absolute top-2 right-2 bg-[#fdfcf9] text-black text-xs px-2 py-1 rounded-xl z-10 border border-[#ddccc9]">
+              {currentSlide + 1}/{allFacilities[selectedIndex].photo.length}
+            </div>
+          )}
+        </div>
+        {/* 矢印バー：画像直下に隙間なく配置 */}
+        
+  <div className="flex items-center justify-between w-full bg-[#fdfcf9]  h-11 rounded-b-xl border border-[#ddccc9]">
+    <button
+      onClick={() => {
+        const newIndex = (currentSlide - 1 + allFacilities[selectedIndex].photo.length) % allFacilities[selectedIndex].photo.length;
+        carouselRef.current.goTo(newIndex, false);
+        setCurrentSlide(newIndex);
+      }}
+      className="bg-transparent text-[#FF6B56] border-r border-[#ddccc9] p-2 w-11 h-11 flex items-center justify-center "
+    >
+      <svg aria-label="前の写真を表示" class="h-[13px] border-b border-transparent transition-jm group-hover:border-jm-linkHover" width="24" height="24" role="img" aria-hidden="false" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 13L5.27083 8L11 3" stroke="#FF6B56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </button>
+    <button
+      onClick={() => {
+        const newIndex = (currentSlide + 1) % allFacilities[selectedIndex].photo.length;
+        carouselRef.current.goTo(newIndex, false);
+        setCurrentSlide(newIndex);
+      }}
+      className="bg-transparent text-[#FF6B56] border-l border-[#ddccc9] p-2 w-11 h-11 flex items-center justify-center "
+    >
+      <svg aria-label="次の写真を表示" class="h-[13px] border-b border-transparent transition-jm group-hover:border-jm-linkHover" width="24" height="24" role="img" aria-hidden="false" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13L10.7292 8L5 3" stroke="#FF6B56" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </button>
+  </div>
+
                   <div className="flex flex-col items-start justify-start p-4 w-full h-full gap-4">
                     <p className="lg:text-xl md:text-sm text-[#343434]">
                       <span className="lg:text-2xl md:text-xl font-bold">
@@ -214,9 +291,12 @@ const FacilityAllow = () => {
                     <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
                       施設紹介
                     </p>
-                    <p className="lg:text-base text-sm text-[#343434] w-4/5">
-                      <pre>{allFacilities[selectedIndex].introduction}</pre>
-                    </p>
+                    <div
+  className="lg:text-base text-sm text-[#343434] w-4/5"
+  style={{ whiteSpace: 'pre-wrap' }}
+>
+  {allFacilities[selectedIndex].introduction}
+</div>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
                     <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
