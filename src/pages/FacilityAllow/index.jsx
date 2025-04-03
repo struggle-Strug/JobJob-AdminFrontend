@@ -77,7 +77,7 @@ const FacilityAllow = () => {
 
   const getFacilityData = useCallback(async () => {
     const response = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/v1/facility/all`
+      `${process.env.REACT_APP_API_URL}/api/v1/facility/request`
     );
     setAllFacilities(
       response.data.facility.filter(
@@ -165,6 +165,9 @@ const FacilityAllow = () => {
                     </p>
                     <div>
                       <p className="lg:text-sm md:text-xs text-[#343434]">
+                        〒{allFacilities[selectedIndex].postal_code}
+                      </p>
+                      <p className="lg:text-sm md:text-xs text-[#343434]">
                         {allFacilities[selectedIndex].prefecture}
                         {allFacilities[selectedIndex].city}
                         {allFacilities[selectedIndex].village}
@@ -215,9 +218,12 @@ const FacilityAllow = () => {
                       施設紹介
                     </p>
                     <p className="lg:text-base text-sm text-[#343434] w-4/5">
-                      <pre>{allFacilities[selectedIndex].introduction}</pre>
+                      <pre className="w-full break-words overflow-auto whitespace-normal">
+                        {allFacilities[selectedIndex].introduction}
+                      </pre>
                     </p>
                   </div>
+
                   <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
                     <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
                       アクセス
@@ -286,7 +292,7 @@ const FacilityAllow = () => {
                           "-"
                         )[1]
                       }
-                      日
+                      月
                     </p>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
