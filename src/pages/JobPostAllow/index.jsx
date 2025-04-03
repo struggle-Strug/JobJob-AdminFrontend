@@ -274,6 +274,38 @@ const JobPostAllow = () => {
                     </p>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+              <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                待遇
+              </p>
+              <div className="flex flex-col w-4/5 py-6">
+                <div className="inline-block items-start justify-start gap-2">
+                  {jobPosts[selectedIndex]?.treatment_type.map((item, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                      >
+                        <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
+                          {item}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="lg:text-base text-sm text-[#343434] mt-4">
+                  <pre>{jobPosts[selectedIndex]?.treatment_content}</pre>
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+              <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                長期休暇・特別休暇
+              </p>
+              <p className="lg:text-base text-sm text-[#343434] py-6 w-4/5">
+                <pre>{jobPosts[selectedIndex]?.special_content}</pre>
+              </p>
+            </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
                     <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
                       教育体制・研修
                     </p>
