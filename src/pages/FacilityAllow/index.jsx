@@ -85,7 +85,7 @@ const FacilityAllow = () => {
       );
       setAllFacilities(
         response.data.facility.filter(
-          (facility) => facility.allowed === "allowed"
+          (facility) => facility.allowed === "pending"
         )
       );
       setError(null); // 正常に取得できた場合、エラー状態をリセット
@@ -116,7 +116,6 @@ const FacilityAllow = () => {
     facilityId: facility.facility_id,
     corporationId: facility.customer_id,
   }));
-
   const handleAllow = async (id, status) => {
     const response = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/v1/facility/${id}/${status}`
