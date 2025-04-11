@@ -1,7 +1,8 @@
-import { Route, Routes, Navigate } from "react-router-dom";
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { Suspense, lazy, useEffect, useState, useCallback } from "react";
 import { useAuth } from "./Context/AuthContext";
 import axios from "axios";
+import { message } from "antd";
 const Login = lazy(() => import("./pages/Login"));
 const Layout = lazy(() => import("./Components/Layout"));
 const PageLayout = lazy(() => import("./Components/PageLayout"));
@@ -23,36 +24,39 @@ const Loading = lazy(() => import("./Components/Loading"));
 
 function App() {
   const { setIsAuthenticated, setAdmin, admin } = useAuth();
-  const [isLoading, setIsLoading] = useState(true);
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
-  const getUserData = async () => {
+  // Use useCallback to memoize the getUserData function
+  const getUserData = useCallback(async () => {
     try {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/user/tokenlogin`
+        `${process.env.REACT_APP_API_URL}/api/v1/adminuser/tokenlogin`
       );
+      // If successful, set admin and authentication state
       setAdmin(res.data.user.data);
       setIsAuthenticated(true);
     } catch (err) {
-      console.error("Failed to fetch user data:", err);
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false); // Ensure loading state is updated
+      // Handle 401 Unauthorized Error
+      if (err.response?.status === 401) {
+        message.error("ログインしてください。");
+        localStorage.removeItem("token"); // Remove token from localStorage
+        setIsAuthenticated(false); // Set authentication state to false
+        setTimeout(() => {
+          navigate("/"); // Redirect to login page after a short delay
+        }, 500);
+      }
     }
-  };
+  }, [setIsAuthenticated, setAdmin]); // Dependencies ensure getUserData is only recreated when necessary
 
   useEffect(() => {
+    // Only call getUserData if token exists
     if (token) {
       axios.defaults.headers.common["Authorization"] = token;
-      getUserData();
-    } else {
-      setIsLoading(false); // No token, skip loading
+      getUserData(); // Call the memoized getUserData
     }
-  }, [token]);
+  }, [token, getUserData]); // Dependency on token ensures the effect runs only when token is available
 
-  if (isLoading) {
-    return <Loading />; // Show a spinner or loading indicator
-  }
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
