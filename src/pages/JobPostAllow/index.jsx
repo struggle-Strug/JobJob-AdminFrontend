@@ -1,10 +1,11 @@
+"use client";
+
 import { Button, message, Modal, Space, Table } from "antd";
 import axios from "axios";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Facilities } from "../../utils/constants/categories";
-import { getJobValueByKey } from "../../utils/getFunctions";
 
 const JobPostAllow = () => {
   const [jobPosts, setJobPosts] = useState([]);
@@ -199,7 +200,10 @@ const JobPostAllow = () => {
                     />
                   ) : (
                     <img
-                      src={jobPosts[selectedIndex]?.picture[0]}
+                      src={
+                        jobPosts[selectedIndex]?.picture[0] ||
+                        "/placeholder.svg"
+                      }
                       alt={jobPosts[selectedIndex]?.sub_title}
                       className="w-2/3 aspect-[2/1] object-cover rounded-lg"
                     />
@@ -213,7 +217,7 @@ const JobPostAllow = () => {
                     dangerouslySetInnerHTML={{
                       __html: jobPosts[selectedIndex]?.sub_description,
                     }}
-                    className="p-2 lg:text-base text-sm mt-8 text-[#343434]"
+                    className="p-2 lg:text-base text-sm mt-8 text-[#343434] overflow-auto"
                   />
                 </div>
                 <div className="flex flex-col bg-white px-4 rounded-lg mt-4">
@@ -232,7 +236,7 @@ const JobPostAllow = () => {
                     <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
                       仕事内容
                     </p>
-                    <pre className="break-words lg:text-base text-sm text-[#343434] py-6 w-4/5 overflow-x-auto whitespace-pre-wrap">
+                    <pre className="lg:text-base text-sm text-[#343434] py-6 w-4/5 overflow-auto whitespace-pre-wrap break-words">
                       {jobPosts[selectedIndex]?.work_content}
                     </pre>
                   </div>
@@ -249,7 +253,7 @@ const JobPostAllow = () => {
                           return (
                             <div
                               key={index}
-                              className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                              className="inline-block text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
                             >
                               <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
                                 {item}
@@ -269,42 +273,50 @@ const JobPostAllow = () => {
                     <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
                       給与の備考
                     </p>
-                    <p className="lg:text-base text-sm text-[#343434] py-6 w-4/5">
-                      <pre>{jobPosts[selectedIndex]?.salary_remarks}</pre>
-                    </p>
+                    <div className="lg:text-base text-sm text-[#343434] py-6 w-4/5 overflow-auto">
+                      <pre className="whitespace-pre-wrap break-words">
+                        {jobPosts[selectedIndex]?.salary_remarks}
+                      </pre>
+                    </div>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
-              <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
-                待遇
-              </p>
-              <div className="flex flex-col w-4/5 py-6">
-                <div className="inline-block items-start justify-start gap-2">
-                  {jobPosts[selectedIndex]?.treatment_type.map((item, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
-                      >
-                        <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
-                          {item}
-                        </p>
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      待遇
+                    </p>
+                    <div className="flex flex-col w-4/5 py-6">
+                      <div className="inline-block items-start justify-start gap-2">
+                        {jobPosts[selectedIndex]?.treatment_type.map(
+                          (item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className="inline-block text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                              >
+                                <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
+                                  {item}
+                                </p>
+                              </div>
+                            );
+                          }
+                        )}
                       </div>
-                    );
-                  })}
-                </div>
-                <p className="lg:text-base text-sm text-[#343434] mt-4">
-                  <pre>{jobPosts[selectedIndex]?.treatment_content}</pre>
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
-              <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
-                長期休暇・特別休暇
-              </p>
-              <p className="lg:text-base text-sm text-[#343434] py-6 w-4/5">
-                <pre>{jobPosts[selectedIndex]?.special_content}</pre>
-              </p>
-            </div>
+                      <div className="lg:text-base text-sm text-[#343434] mt-4 overflow-auto">
+                        <pre className="whitespace-pre-wrap break-words">
+                          {jobPosts[selectedIndex]?.treatment_content}
+                        </pre>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      長期休暇・特別休暇
+                    </p>
+                    <div className="lg:text-base text-sm text-[#343434] py-6 w-4/5 overflow-auto">
+                      <pre className="whitespace-pre-wrap break-words">
+                        {jobPosts[selectedIndex]?.special_content}
+                      </pre>
+                    </div>
+                  </div>
                   <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
                     <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
                       教育体制・研修
@@ -315,7 +327,7 @@ const JobPostAllow = () => {
                           return (
                             <div
                               key={index}
-                              className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                              className="inline-block text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
                             >
                               <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
                                 {item}
@@ -337,7 +349,7 @@ const JobPostAllow = () => {
                             return (
                               <div
                                 key={index}
-                                className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                                className="inline-block text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
                               >
                                 <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
                                   {item}
@@ -347,9 +359,11 @@ const JobPostAllow = () => {
                           }
                         )}
                       </div>
-                      <p className="lg:text-base text-sm text-[#343434] mt-4">
-                        <pre>{jobPosts[selectedIndex]?.work_time_content}</pre>
-                      </p>
+                      <div className="lg:text-base text-sm text-[#343434] mt-4 overflow-auto">
+                        <pre className="whitespace-pre-wrap break-words">
+                          {jobPosts[selectedIndex]?.work_time_content}
+                        </pre>
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
@@ -363,7 +377,7 @@ const JobPostAllow = () => {
                             return (
                               <div
                                 key={index}
-                                className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                                className="inline-block text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
                               >
                                 <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
                                   {item}
@@ -373,9 +387,11 @@ const JobPostAllow = () => {
                           }
                         )}
                       </div>
-                      <p className="lg:text-base text-sm text-[#343434] mt-4">
-                        <pre>{jobPosts[selectedIndex]?.rest_content}</pre>
-                      </p>
+                      <div className="lg:text-base text-sm text-[#343434] mt-4 overflow-auto">
+                        <pre className="whitespace-pre-wrap break-words">
+                          {jobPosts[selectedIndex]?.rest_content}
+                        </pre>
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
@@ -390,7 +406,7 @@ const JobPostAllow = () => {
                             return (
                               <div
                                 key={index}
-                                className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                                className="inline-block text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
                               >
                                 <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
                                   {item}
@@ -399,11 +415,11 @@ const JobPostAllow = () => {
                             );
                           })}
                       </div>
-                      <p className="lg:text-base text-sm text-[#343434] mt-4">
-                        <pre>
+                      <div className="lg:text-base text-sm text-[#343434] mt-4 overflow-auto">
+                        <pre className="whitespace-pre-wrap break-words">
                           {jobPosts[selectedIndex]?.qualification_content}
                         </pre>
-                      </p>
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
@@ -411,35 +427,37 @@ const JobPostAllow = () => {
                       歓迎要件
                     </p>
                     <div className="flex flex-col w-4/5 py-6">
-                      <p className="lg:text-base text-sm text-[#343434]">
-                        <pre>
+                      <div className="lg:text-base text-sm text-[#343434] overflow-auto">
+                        <pre className="whitespace-pre-wrap break-words">
                           {jobPosts[selectedIndex]?.qualification_welcome}
                         </pre>
-                      </p>
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-start justify-start">
                     <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
                       選考プロセス
                     </p>
-                    <p className="lg:text-base text-sm text-[#343434] py-6 w-4/5">
-                      <pre>{jobPosts[selectedIndex]?.process}</pre>
-                    </p>
+                    <div className="lg:text-base text-sm text-[#343434] py-6 w-4/5 overflow-auto">
+                      <pre className="whitespace-pre-wrap break-words">
+                        {jobPosts[selectedIndex]?.process}
+                      </pre>
+                    </div>
                   </div>
                 </div>
                 <div className="flex flex-col bg-white p-4 rounded-lg mt-8">
                   <p className="lg:text-lg font-bold text-sm text-[#343434]">
                     写真
                   </p>
-                  <div className="flex items-start justify-start gap-2 py-4">
+                  <div className="grid grid-cols-3 justify-start gap-2 py-4">
                     {jobPosts[selectedIndex]?.picture?.length > 0 &&
                       jobPosts[selectedIndex]?.picture?.map((item, index) => {
                         return (
                           <img
                             key={index}
-                            src={item}
+                            src={item || "/placeholder.svg"}
                             alt="jobpost"
-                            className="w-1/3 aspect-[2/1] object-cover rounded-lg"
+                            className="col-span-1 w-full aspect-[2/1] object-cover rounded-lg"
                           />
                         );
                       })}
@@ -465,29 +483,24 @@ const JobPostAllow = () => {
                       募集職種
                     </p>
                     <div className="flex flex-col items-start, justify-start w-4/5">
-                      {jobPosts?.map((jobPost, index) => {
-                        return (
-                          <Link
-                            key={index}
-                            to={`${jobMapping[jobPosts[selectedIndex]?.type]}`}
-                            className="lg:text-base text-sm text-[#FF2A3B] hover:underline"
-                          >
-                            {jobPosts[selectedIndex]?.type}(
-                            {jobPosts[selectedIndex]?.employment_type})
-                          </Link>
-                        );
-                      })}
+                      <Link
+                        to={`${jobMapping[jobPosts[selectedIndex]?.type]}`}
+                        className="lg:text-base text-sm text-[#FF2A3B] hover:underline"
+                      >
+                        {jobPosts[selectedIndex]?.type}(
+                        {jobPosts[selectedIndex]?.employment_type})
+                      </Link>
                     </div>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
                     <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
                       施設紹介
                     </p>
-                    <p className="lg:text-base text-sm text-[#343434] w-4/5">
-                      <pre>
+                    <div className="lg:text-base text-sm text-[#343434] w-4/5 overflow-auto">
+                      <pre className="whitespace-pre-wrap break-words">
                         {jobPosts[selectedIndex]?.facility_id.introduction}
                       </pre>
-                    </p>
+                    </div>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
                     <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
@@ -500,7 +513,7 @@ const JobPostAllow = () => {
                             return (
                               <div
                                 key={index}
-                                className="inline-block  text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                                className="inline-block text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
                               >
                                 <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
                                   {item}
@@ -557,7 +570,7 @@ const JobPostAllow = () => {
                           selectedIndex
                         ]?.facility_id.establishment_date.split("-")[1]
                       }
-                      日
+                      月
                     </p>
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] py-6 border-[#e7e7e7]">
@@ -581,19 +594,21 @@ const JobPostAllow = () => {
                     <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
                       営業時間
                     </p>
-                    <p className="lg:text-base text-sm text-[#343434] w-4/5">
-                      <pre>
+                    <div className="lg:text-base text-sm text-[#343434] w-4/5 overflow-auto">
+                      <pre className="whitespace-pre-wrap break-words">
                         {jobPosts[selectedIndex]?.facility_id.service_time}
                       </pre>
-                    </p>
+                    </div>
                   </div>
                   <div className="flex items-start justify-start py-6">
                     <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
                       休日
                     </p>
-                    <p className="lg:text-base text-sm text-[#343434] w-4/5">
-                      <pre>{jobPosts[selectedIndex]?.facility_id.rest_day}</pre>
-                    </p>
+                    <div className="lg:text-base text-sm text-[#343434] w-4/5 overflow-auto">
+                      <pre className="whitespace-pre-wrap break-words">
+                        {jobPosts[selectedIndex]?.facility_id.rest_day}
+                      </pre>
+                    </div>
                   </div>
                 </div>
               </div>
