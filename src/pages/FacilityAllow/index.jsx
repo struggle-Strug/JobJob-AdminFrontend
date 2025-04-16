@@ -66,7 +66,7 @@ const FacilityAllow = () => {
           </Button>
           <Button
             className="bg-blue-100 text-blue-600 border-blue-200 hover:bg-blue-200"
-            onClick={() => handleAllow(record.facilityId, "draft")}
+            onClick={() => handleAllow(record.facilityId, "rejected")}
           >
             差し戻し
           </Button>
