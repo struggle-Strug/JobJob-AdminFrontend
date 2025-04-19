@@ -114,7 +114,7 @@ const FacilityAllow = () => {
     applicationDate: moment(facility.created_at).format("YYYY/MM/DD"),
     facilityName: facility.name,
     facilityId: facility.facility_id,
-    corporationId: facility.customer_id,
+    corporationId: facility.customer_id.customer_id,
   }));
   const handleAllow = async (id, status) => {
     const response = await axios.post(
