@@ -1,3 +1,5 @@
+"use client";
+
 import { Table, Button, Space, message, Modal, Carousel } from "antd";
 import axios from "axios";
 import { useCallback, useEffect, useState, useRef } from "react";
@@ -114,7 +116,7 @@ const FacilityAllow = () => {
     applicationDate: moment(facility.created_at).format("YYYY/MM/DD"),
     facilityName: facility.name,
     facilityId: facility.facility_id,
-    corporationId: facility.customer_id,
+    corporationId: facility.customer_id.customer_id,
   }));
   const handleAllow = async (id, status) => {
     const response = await axios.post(
@@ -188,7 +190,7 @@ const FacilityAllow = () => {
                           (photoUrl, index) => (
                             <div key={index}>
                               <img
-                                src={photoUrl}
+                                src={photoUrl || "/placeholder.svg"}
                                 alt={`facility-photo-${index}`}
                                 className="w-full aspect-video object-cover rounded-t-xl"
                               />
@@ -242,9 +244,9 @@ const FacilityAllow = () => {
                         <path
                           d="M11 13L5.27083 8L11 3"
                           stroke="#FF6B56"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         ></path>
                       </svg>
                     </button>
@@ -272,9 +274,9 @@ const FacilityAllow = () => {
                         <path
                           d="M5 13L10.7292 8L5 3"
                           stroke="#FF6B56"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         ></path>
                       </svg>
                     </button>
@@ -441,17 +443,21 @@ const FacilityAllow = () => {
                     <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
                       営業時間
                     </p>
-                    <p className="lg:text-base text-sm text-[#343434] w-4/5">
-                      <pre>{allFacilities[selectedIndex].service_time}</pre>
-                    </p>
+                    <div className="lg:text-base text-sm text-[#343434] w-4/5 overflow-auto">
+                      <pre className="whitespace-pre-wrap break-words">
+                        {allFacilities[selectedIndex].service_time}
+                      </pre>
+                    </div>
                   </div>
                   <div className="flex items-start justify-start py-6">
                     <p className="lg:text-base text-sm font-bold text-[#343434] w-1/5">
                       休日
                     </p>
-                    <p className="lg:text-base text-sm text-[#343434] w-4/5">
-                      <pre>{allFacilities[selectedIndex].rest_day}</pre>
-                    </p>
+                    <div className="lg:text-base text-sm text-[#343434] w-4/5 overflow-auto">
+                      <pre className="whitespace-pre-wrap break-words">
+                        {allFacilities[selectedIndex].rest_day}
+                      </pre>
+                    </div>
                   </div>
                 </div>
               </div>

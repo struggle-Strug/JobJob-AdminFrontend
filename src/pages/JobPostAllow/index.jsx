@@ -236,7 +236,23 @@ const JobPostAllow = () => {
                     <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
                       仕事内容
                     </p>
-                    <pre className="lg:text-base text-sm text-[#343434] py-6 w-4/5 overflow-auto whitespace-pre-wrap break-words">
+                    <pre className="flex flex-col lg:text-base text-sm text-[#343434] py-6 w-4/5 overflow-auto whitespace-pre-wrap break-words">
+                      <div className="inline-block items-start justify-start gap-2 w-4/5">
+                        {jobPosts[selectedIndex]?.work_item.map(
+                          (item, index) => {
+                            return (
+                              <div
+                                key={index}
+                                className="inline-block text-center bg-[#F5BD2E] text-white m-1 px-2 py-1 rounded-lg"
+                              >
+                                <p className="lg:text-[0.7rem] md:text-[0.6rem] font-bold">
+                                  {item}
+                                </p>
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
                       {jobPosts[selectedIndex]?.work_content}
                     </pre>
                   </div>

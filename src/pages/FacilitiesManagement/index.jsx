@@ -70,7 +70,7 @@ const FacilitiesManagement = () => {
     facilityGenre: facility.facility_genre,
     prefecture: facility.prefecture,
     city: facility.city,
-    corporationId: facility.customer_id._id,
+    corporationId: facility.customer_id.customer_id,
     publicJobCount: facility.publicJobCount,
   }));
 
