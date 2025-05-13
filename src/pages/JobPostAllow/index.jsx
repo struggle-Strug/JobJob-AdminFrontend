@@ -488,7 +488,7 @@ const JobPostAllow = () => {
                       法人・施設名
                     </p>
                     <Link
-                      to={`/facility/details/${jobPosts[selectedIndex]?.facility_id.facility_id}`}
+                      to={`/facility/${jobPosts[selectedIndex]?.facility_id.facility_id}`}
                       className="lg:text-base text-sm text-[#FF2A3B] hover:underline w-4/5"
                     >
                       {jobPosts[selectedIndex]?.facility_id.name}
