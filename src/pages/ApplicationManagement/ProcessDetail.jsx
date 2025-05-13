@@ -17,7 +17,7 @@ const ProcessDetail = ({ processes, getProcessesByStatus }) => {
 
   const jobPostLink = (jobPost) => {
     const jobType = getJobTypeValue(JobType, jobPost.type);
-    return `/${jobType}/details/${jobPost.jobpost_id}`;
+    return `/${jobType}/${jobPost.jobpost_id}`;
   };
 
   const handleProfileModalOpen = (data) => {
