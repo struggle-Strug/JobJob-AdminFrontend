@@ -10,75 +10,115 @@ const CustomerManagement = () => {
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [facilities, setFacilities] = useState([]);
   const [jobposts, setJobposts] = useState([]);
+  const [status, setStatus] = useState("corporation");
 
   // Table columns
-  const columns = [
-    {
-      title: "登録日",
-      dataIndex: "registrationDate",
-      key: "registrationDate",
-      width: 120,
-    },
-    {
-      title: "法人名",
-      dataIndex: "corporationName",
-      key: "corporationName",
-      width: 120,
-    },
-    {
-      title: "法人ID",
-      dataIndex: "corporationId",
-      key: "corporationId",
-      width: 120,
-    },
-    {
-      title: "担当者名",
-      dataIndex: "contactName",
-      key: "contactName",
-      width: 120,
-    },
-    {
-      title: "メールアドレス",
-      dataIndex: "email",
-      key: "email",
-      width: 120,
-    },
-    {
-      title: "電話番号",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
-      width: 120,
-    },
-    {
-      title: "公開施設数",
-      dataIndex: "facilityCount",
-      key: "facilityCount",
-      width: 120,
-    },
-    {
-      title: "公開求人数",
-      dataIndex: "jobpostCount",
-      key: "jobpostCount",
-      width: 120,
-    },
-    {
-      title: "管理画面",
-      key: "actions",
-      render: (_, record) => (
-        <Space size="small">
-          <Button
-            type="primary"
-            className="bg-blue-100 text-blue-600 border-blue-200 hover:bg-blue-200"
-            onClick={() => loginAsCustomer(record.corporationId)}
-          >
-            管理画面
-          </Button>
-        </Space>
-      ),
-      width: 120,
-    },
-  ];
-
+  const columns =
+    status === "corporation"
+      ? [
+          {
+            title: "登録日",
+            dataIndex: "registrationDate",
+            key: "registrationDate",
+            width: 120,
+          },
+          {
+            title: "法人名",
+            dataIndex: "corporationName",
+            key: "corporationName",
+            width: 120,
+          },
+          {
+            title: "法人ID",
+            dataIndex: "corporationId",
+            key: "corporationId",
+            width: 120,
+          },
+          {
+            title: "担当者名",
+            dataIndex: "contactName",
+            key: "contactName",
+            width: 120,
+          },
+          {
+            title: "メールアドレス",
+            dataIndex: "email",
+            key: "email",
+            width: 120,
+          },
+          {
+            title: "電話番号",
+            dataIndex: "phoneNumber",
+            key: "phoneNumber",
+            width: 120,
+          },
+          {
+            title: "公開施設数",
+            dataIndex: "facilityCount",
+            key: "facilityCount",
+            width: 120,
+          },
+          {
+            title: "公開求人数",
+            dataIndex: "jobpostCount",
+            key: "jobpostCount",
+            width: 120,
+          },
+          {
+            title: "管理画面",
+            key: "actions",
+            render: (_, record) => (
+              <Space size="small">
+                <Button
+                  type="primary"
+                  className="bg-blue-100 text-blue-600 border-blue-200 hover:bg-blue-200"
+                  onClick={() => loginAsCustomer(record.corporationId)}
+                >
+                  管理画面
+                </Button>
+              </Space>
+            ),
+            width: 120,
+          },
+        ]
+      : [
+          {
+            title: "登録日",
+            dataIndex: "registrationDate",
+            key: "registrationDate",
+            width: 120,
+          },
+          {
+            title: "法人名",
+            dataIndex: "corporationName",
+            key: "corporationName",
+            width: 120,
+          },
+          {
+            title: "法人ID",
+            dataIndex: "corporationId",
+            key: "corporationId",
+            width: 120,
+          },
+          {
+            title: "氏名",
+            dataIndex: "contactName",
+            key: "contactName",
+            width: 120,
+          },
+          {
+            title: "メールアドレス",
+            dataIndex: "email",
+            key: "email",
+            width: 120,
+          },
+          {
+            title: "パスワード",
+            dataIndex: "password",
+            key: "password",
+            width: 120,
+          },
+        ];
   const data = filteredCustomers.map((customer, index) => ({
     key: index,
     registrationDate: moment(customer.registrationDate).format("YYYY/MM/DD"),
@@ -86,6 +126,7 @@ const CustomerManagement = () => {
     corporationId: customer.customer_id,
     contactName: customer.contactPerson,
     email: customer.email,
+    password: customer.initialPassword,
     phoneNumber: customer.phoneNumber,
     facilityCount: facilities.filter(
       (facility) => facility.customer_id === customer.customer_id
@@ -103,7 +144,7 @@ const CustomerManagement = () => {
     setAllCustomers(customers);
     setFilteredCustomers(
       customers
-        // .filter((customer) => customer.allowed === true)
+        .filter((customer) => customer.phoneNumber !== "")
         .sort(
           (a, b) => new Date(a.registrationDate) - new Date(b.registrationDate)
         )
@@ -140,6 +181,18 @@ const CustomerManagement = () => {
   };
 
   useEffect(() => {
+    if (status === "corporation") {
+      setFilteredCustomers(
+        allCustomers.filter((customer) => customer.phoneNumber !== "")
+      );
+    } else {
+      setFilteredCustomers(
+        allCustomers.filter((customer) => customer.phoneNumber === "")
+      );
+    }
+  }, [status]);
+
+  useEffect(() => {
     getAllCustomers();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
@@ -150,6 +203,28 @@ const CustomerManagement = () => {
         法人管理
       </p>
       <div className="p-4 mt-8">
+        <div className="flex items-center gap-4 mb-6">
+          <button
+            className={`px-4 py-2 rounded-md ${
+              status === "corporation"
+                ? "bg-blue-500 text-white hover:bg-blue-600 duration-300"
+                : "bg-gray-200 text-gray-600 hover:bg-gray-300 duration-300"
+            }`}
+            onClick={() => setStatus("corporation")}
+          >
+            法人
+          </button>
+          <button
+            className={`px-4 py-2 rounded-md ${
+              status === "user"
+                ? "bg-blue-500 text-white hover:bg-blue-600 duration-300"
+                : "bg-gray-200 text-gray-600 hover:bg-gray-300 duration-300"
+            }`}
+            onClick={() => setStatus("user")}
+          >
+            ユーザー
+          </button>
+        </div>
         <div className="flex items-center gap-4 mb-6">
           <Input
             type="text"
