@@ -297,6 +297,12 @@ const JobPostAllow = () => {
                   </div>
                   <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
                     <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
+                      想定年収
+                    </p>
+                    <p className="lg:text-base text-sm text-[#343434] py-6 w-4/5">{`${jobPosts[selectedIndex]?.expected_income}円`}</p>
+                  </div>
+                  <div className="flex items-start justify-start border-b-[1px] border-[#e7e7e7]">
+                    <p className="lg:text-base text-sm font-bold text-[#343434] py-6 w-1/5">
                       待遇
                     </p>
                     <div className="flex flex-col w-4/5 py-6">
