@@ -143,11 +143,7 @@ const CustomerManagement = () => {
     const customers = response.data.customers;
     setAllCustomers(customers);
     setFilteredCustomers(
-      customers
-        .filter((customer) => customer.phoneNumber !== "")
-        .sort(
-          (a, b) => new Date(a.registrationDate) - new Date(b.registrationDate)
-        )
+      customers.filter((customer) => customer.phoneNumber !== "")
     );
     setFacilities(response.data.facilities);
     setJobposts(response.data.jobposts);
