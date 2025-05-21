@@ -140,13 +140,14 @@ const CustomerManagement = () => {
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/customers/all`
     );
-    const customers = response.data.customers;
+    if (response.data.error) return message.error(response.data.message);
+    const customers = response.data?.customers;
     setAllCustomers(customers);
     setFilteredCustomers(
-      customers.filter((customer) => customer.phoneNumber !== "")
+      customers?.filter((customer) => customer.phoneNumber !== "")
     );
-    setFacilities(response.data.facilities);
-    setJobposts(response.data.jobposts);
+    setFacilities(response.data?.facilities);
+    setJobposts(response.data?.jobposts);
   }, []);
 
   const handleSearch = () => {
